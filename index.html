@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Skribekk</title>
+    <link rel="stylesheet" href="reset.css" />
+    <style>
+      body {
+        margin: 16px;
+      }
+
+      canvas {
+        border: 1px solid black;
+      }
+
+      .tools {
+        display: flex;
+        justify-content: space-between;
+        max-width: 500px;
+      }
+
+      .color {
+        width: 30px;
+        height: 30px;
+      }
+
+      .color.blue {
+        background-color: blue;
+      }
+
+      .color.green {
+        background-color: green;
+      }
+
+      .color.red {
+        background-color: red;
+      }
+
+      .color.black {
+        background-color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Skribekk</h1>
+    <div class="tools">
+      <button type="button" onclick="clearCanvas()">Clear</button>
+      <button class="color blue"></button>
+      <button class="color green"></button>
+      <button class="color red"></button>
+      <button class="color black"></button>
+    </div>
+    <canvas id="canvas" width="500px" height="500px"></canvas>
+  </body>
+
+  <script type="application/javascript">
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    let prevX = null;
+    let prevY = null;
+
+    ctx.lineWidth = 3;
+
+    let draw = false;
+    const offsetX = canvas.getBoundingClientRect().left;
+    const offsetY = canvas.getBoundingClientRect().top;
+
+    window.addEventListener("mousedown", (e) => {
+      draw = true;
+    });
+
+    window.addEventListener("mouseup", (e) => {
+      draw = false;
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      if (prevX == null || prevY == null || !draw) {
+        prevX = e.clientX - offsetX;
+        prevY = e.clientY - offsetY;
+        return;
+      }
+
+      let currentX = e.clientX - offsetX;
+      let currentY = e.clientY - offsetY;
+
+      ctx.beginPath();
+      ctx.moveTo(prevX, prevY);
+      ctx.lineTo(currentX, currentY);
+      ctx.stroke();
+
+      prevX = currentX;
+      prevY = currentY;
+    });
+
+    function clearCanvas() {
+      console.log("clear!");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  </script>
+</html>
